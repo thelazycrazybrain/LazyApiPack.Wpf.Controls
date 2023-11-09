@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:LazyApiPack.Wpf.Controls">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ThemeColorsAutumnDark.xaml"/>
+        <ResourceDictionary Source="ColorPartSelectorTemplate.xaml" />
+        <ResourceDictionary Source="COlorSelectorTemplate.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
