@@ -5,6 +5,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ThemeColorsAutumnDark.xaml"/>
         <ResourceDictionary Source="ColorPartSelectorTemplate.xaml" />
-        <ResourceDictionary Source="COlorSelectorTemplate.xaml"/>
+        <ResourceDictionary Source="ColorSelectorTemplate.xaml"/>
+        <ResourceDictionary Source="CloseableTabItemTemplate.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
