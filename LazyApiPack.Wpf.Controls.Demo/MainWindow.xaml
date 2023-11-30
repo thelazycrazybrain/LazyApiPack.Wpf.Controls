@@ -4,12 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LazyApiPack.Wpf.Controls.Demo"
-        xmlns:Controls="clr-namespace:LazyApiPack.Wpf.Controls;assembly=LazyApiPack.Wpf.Controls" x:Class="LazyApiPack.Wpf.Controls.Demo.MainWindow"
+        xmlns:Controls="clr-namespace:LazyApiPack.Wpf.Controls;assembly=LazyApiPack.Wpf.Controls" xmlns:Animations="clr-namespace:LayzApiPack.Wpf.Animations;assembly=LazyApiPack.Wpf.Controls" xmlns:nav="clr-namespace:LazyApiPack.Wpf.Controls.Navigation;assembly=LazyApiPack.Wpf.Controls" x:Class="LazyApiPack.Wpf.Controls.Demo.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Foreground="{DynamicResource ForegroundBrush}" Background="{DynamicResource BackgroundBrush}">
+
     <Grid>
 
-        <Controls:ColorSelector HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="359" Width="472"/>
+        <!--<Controls:ColorSelector HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="359" Width="472"/>-->
+
+       
+        <TabControl>
+            <nav:CloseableTabItem Header="TabItem">
+                <Grid Background="{DynamicResource BackgroundBrush}">
+                    <Animations:WaitCircle Foreground="{DynamicResource AccentBrushA}" BorderBrush="{DynamicResource AccentBrushB}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="37" Width="37"/>
+                </Grid>
+            </nav:CloseableTabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
 
     </Grid>
 </Window>

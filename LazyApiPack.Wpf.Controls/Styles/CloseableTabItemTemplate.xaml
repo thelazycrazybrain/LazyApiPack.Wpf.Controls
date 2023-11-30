@@ -1,8 +1,19 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:navctl="clr-namespace:LazyApiPack.Wpf.Controls.Navigation">
+                    xmlns:navctl="clr-namespace:LazyApiPack.Wpf.Controls.Navigation"
+                    xmlns:conv="clr-namespace:LazyApiPack.Wpf.Utils.Converters;assembly=LazyApiPack.Wpf.Utils">
 
-
+    <DrawingImage x:Key="Icon-Close">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <DrawingGroup.Children>
+                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                    <GeometryDrawing Brush="#FF414141" Geometry="F1M9.5859,12L7.9999,10.414 6.4139,12 1.5859,12 5.5859,8 1.5859,4 6.4139,4 7.9999,5.586 9.5859,4 14.4139,4 10.4139,8 14.4139,12z" />
+                    <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1M4,5L6,5 8,7 10,5 12,5 9,8 12,11 10,11 8,9 6,11 4,11 7,8z" />
+                </DrawingGroup.Children>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
     <SolidColorBrush x:Key="CloseableTabItem.Background" Color="{DynamicResource Fluent.Ribbon.Colors.AccentBaseColor}"/>
     <SolidColorBrush x:Key="CloseableTabItem.Foreground" Color="{DynamicResource BlackColor}" />
     <SolidColorBrush x:Key="CloseableTabItem.Border" Color="{DynamicResource Fluent.Ribbon.Colors.AccentColor40}"/>
@@ -17,6 +28,7 @@
 
     <SolidColorBrush x:Key="CloseableTabItem.Selected.Foreground" Color="{DynamicResource BlackColor}"/>
     <SolidColorBrush x:Key="CloseableTabItem.Selected.Background" Color="{DynamicResource Fluent.Ribbon.Colors.AccentColor20}"/>
+    <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     <Style TargetType="{x:Type navctl:CloseableTabItem}" >
         <Setter Property="Foreground" Value="{DynamicResource CloseableTabItem.Foreground}"/>
         <Setter Property="Padding" Value="6,1,6,1"/>
@@ -30,8 +42,8 @@
                     <Grid SnapsToDevicePixels="true">
                         <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" >
                             <DockPanel x:Name="ContentPanel">
-                                <Image x:Name="PART_Icon" HorizontalAlignment="Center" Margin="3,0,3,0" VerticalAlignment="Center" Width="10" Height="10" DockPanel.Dock="Left" Visibility="{Binding Source, ElementName=PART_Icon, Converter={ StaticResource NullToVisibilityConverter}}" />
-                                <Button x:Name="PART_Close" Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="16" Height="16" DockPanel.Dock="Right" >
+                                <Image x:Name="PART_Icon" HorizontalAlignment="Center" Margin="3,0,3,0" VerticalAlignment="Center" Width="10" Height="10" DockPanel.Dock="Left" Visibility="{Binding Source, ElementName=PART_Icon, Converter={StaticResource NullToVisibilityConverter}}" />
+                                <Button x:Name="PART_Close" Style="{DynamicResource TransparentButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="16" Height="16" DockPanel.Dock="Right" Command="{Binding CloseCommand}" >
                                     <Image Source="{StaticResource Icon-Close}"/>
                                 </Button>
                                 <ContentPresenter x:Name="Content" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ContentSource="Header" RecognizesAccessKey="True" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" />

@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using LazyApiPack.Wpf.Utils.Commands;
 using LazyApiPack.Wpf.Utils.Geometry;
 using LazyApiPack.Wpf.Utils.Xaml;
+using System.Xml;
 
 namespace LazyApiPack.Wpf.Controls.Navigation
 {
@@ -71,7 +72,7 @@ namespace LazyApiPack.Wpf.Controls.Navigation
 
         private void CloseAllExcept(CloseableTabItem tbiExcluded = null)
         {
-            var parent = this.Parent as TabControl;
+            var parent = this.GetParent<TabControl>();
             if (parent != null)
             {
                 foreach (var cti in parent.Items.OfType<CloseableTabItem>().Where(t => tbiExcluded == null || t != tbiExcluded).ToList())
@@ -111,13 +112,16 @@ namespace LazyApiPack.Wpf.Controls.Navigation
 
 
         #region Closing Functionality and apperarance
-        public static readonly RoutedEvent CloseTabEvent = EventManager.RegisterRoutedEvent("CloseTab", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CloseableTabItem));
-
-        public event RoutedEventHandler CloseTab
+        public class CloseTabEventArgs : EventArgs
         {
-            add { AddHandler(CloseTabEvent, value); }
-            remove { RemoveHandler(CloseTabEvent, value); }
+            public CloseTabEventArgs()
+            {
+            }
+
+            public bool Cancel { get; set; }
         }
+        public delegate void CloseTabEvent(object sender, CloseTabEventArgs e);
+        public event CloseTabEvent CloseTab;
 
 
         public static readonly DependencyProperty IconSourceProperty = DependencyProperty.Register(nameof(IconSource), typeof(ImageSource), typeof(CloseableTabItem), new PropertyMetadata(null));
@@ -150,31 +154,30 @@ namespace LazyApiPack.Wpf.Controls.Navigation
 
         public void Close()
         {
-            RaiseEvent(new RoutedEventArgs(CloseTabEvent, this));
-        }
-        bool _closeButtonPressing;
-        private void CloseButton_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var fx = sender as FrameworkElement;
+            var e = new CloseTabEventArgs();
+            CloseTab?.Invoke(this, e);
+            if (e.Cancel) return;
 
-            if (fx.IsOnElement(e.MouseDevice) && (_closeButtonPressing || e.MiddleButton == MouseButtonState.Pressed))
+            var parent = this.GetParent<TabControl>();
+            if (parent != null)
             {
-                Close();
-
+                parent.Items.Remove(this);
             }
-            _closeButtonPressing = false;
-            e.MouseDevice.Capture(null);
         }
 
-        private void CloseButton_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            _closeButtonPressing = true;
-            e.MouseDevice.Capture(sender as IInputElement);
+
+            Close();
+
         }
+
 
         #endregion
 
         #region Templating
+
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -182,12 +185,7 @@ namespace LazyApiPack.Wpf.Controls.Navigation
 
             if (_closeButton != null)
             {
-                _closeButton.AddHandler(Button.PreviewMouseLeftButtonUpEvent,
-                    _closeButton_PreviewMouseLeftButtonUpDelegate = new MouseButtonEventHandler(CloseButton_PreviewMouseLeftButtonUp), true);
-
-                _closeButton.AddHandler(Button.PreviewMouseLeftButtonDownEvent,
-                    _closeButton_PreviewMouseLeftButtonDownDelegate = new MouseButtonEventHandler(CloseButton_PreviewMouseLeftButtonDown), true);
-
+                _closeButton.Click += CloseButton_Click;
                 _closeButton.IsEnabled = CloseButtonEnabled;
             }
 
@@ -200,11 +198,12 @@ namespace LazyApiPack.Wpf.Controls.Navigation
             }
         }
 
+
         private void CloseableTabItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
-                _closeButton_PreviewMouseLeftButtonUpDelegate.Invoke(this, e);
+                CloseButton_Click(sender, e);
 
             }
         }
